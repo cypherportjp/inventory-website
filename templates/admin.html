@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>注文管理 - ミニ四駆・ミニカー・バイク</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #1a3c5e; color: white; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 16px; border-bottom: 3px solid #e05c2a; }
+.header h1 { font-size: 17px; font-weight: 700; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.lock-icon { font-size: 20px; }
+.lock-icon.unlocked::after { content: '🔓'; }
+.lock-icon.locked::after { content: '🔒'; }
+
+.login-box { max-width: 400px; margin: 120px auto; background: white; border-radius: 16px; padding: 40px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+.login-box h2 { font-size: 22px; margin-bottom: 24px; }
+.login-box input { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 16px; margin-bottom: 16px; box-sizing: border-box; }
+.login-box button { width: 100%; padding: 12px; background: #1a3c5e; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+.login-box button:hover { background: #2d5a8a; }
+.login-error { color: #e74c3c; font-size: 13px; margin-top: 12px; display: none; }
+
+.admin-content { display: none; padding: 32px; }
+.admin-content.active { display: block; }
+
+.toolbar { display: flex; gap: 12px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+.toolbar .search { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+.toolbar select { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+.toolbar button { padding: 10px 16px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn-refresh { background: #1a3c5e; color: white; }
+.btn-refresh:hover { background: #2d5a8a; }
+.btn-export { background: #e05c2a; color: white; }
+.btn-export:hover { background: #c44d20; }
+.btn-logout { background: #f1f5f9; color: #64748b; }
+
+.stats-bar { display: flex; gap: 24px; margin-bottom: 28px; }
+.stat-card { background: white; border-radius: 12px; padding: 20px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); min-width: 140px; }
+.stat-card .stat-label { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+.stat-card .stat-value { font-size: 28px; font-weight: 800; color: #1a1a2e; }
+
+.order-list { display: flex; flex-direction: column; gap: 16px; }
+.order-card { background: white; border-radius: 14px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer; transition: box-shadow 0.15s; }
+.order-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.order-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.order-card-id { font-size: 16px; font-weight: 800; color: #1a3c5e; }
+.order-card-time { font-size: 12px; color: #94a3b8; }
+.order-card-client { font-size: 14px; color: #64748b; margin-bottom: 8px; }
+.order-card-items { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+.order-card-total { font-size: 18px; font-weight: 800; color: #e05c2a; text-align: right; }
+.order-card-footer { display: flex; gap: 10px; margin-top: 14px; }
+.order-card-footer button { flex: 1; padding: 9px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-detail { background: #1a3c5e; color: white; }
+.btn-csv { background: #27ae60; color: white; }
+
+.order-detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 400; align-items: center; justify-content: center; overflow: auto; padding: 40px 20px; }
+.order-detail-overlay.active { display: flex; }
+.order-detail-box { background: white; border-radius: 20px; padding: 36px; width: 700px; max-width: 100%; max-height: 90vh; overflow: auto; }
+.order-detail-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 24px; }
+.order-detail-header h2 { font-size: 20px; font-weight: 800; }
+.order-detail-header .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #94a3b8; }
+.order-detail-header .close-btn:hover { color: #1a1a2e; }
+.detail-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; background: #f8fafc; border-radius: 12px; padding: 20px; }
+.detail-meta .dm-item { }
+.detail-meta .dm-label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+.detail-meta .dm-value { font-size: 15px; font-weight: 600; }
+.detail-meta .dm-value.accent { color: #e05c2a; font-size: 20px; }
+.order-detail-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+.order-detail-table th { background: #1a3c5e; color: white; padding: 10px 8px; text-align: left; }
+.order-detail-table td { padding: 9px 8px; border-bottom: 1px solid #e2e8f0; }
+.order-detail-table .right { text-align: right; }
+.order-detail-table .center { text-align: center; }
+.detail-total-row { text-align: right; font-size: 18px; font-weight: 800; padding: 12px 0; color: #1a1a2e; }
+.detail-footer { display: flex; gap: 12px; margin-top: 20px; }
+.detail-footer button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+.empty-msg { text-align: center; padding: 80px 20px; color: #94a3b8; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="lock-icon" id="lock-icon"></span>
+  <h1>注文管理画面</h1>
+  <div class="header-right">
+    <span id="header-status" style="font-size:13px; color:rgba(255,255,255,0.7);"></span>
+    <button class="btn-logout" id="btn-logout" style="display:none; padding:6px 14px; background:rgba(255,255,255,0.15); color:white; border:none; border-radius:6px; font-size:13px; cursor:pointer;" onclick="logout()">ログアウト</button>
+  </div>
+</header>
+
+<div class="login-box" id="login-box">
+  <h2>🔐 管理者ログイン</h2>
+  <input type="password" id="pw-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')login()">
+  <button onclick="login()">ログイン</button>
+  <div class="login-error" id="login-error">パスワードが正しくありません</div>
+</div>
+
+<div class="admin-content" id="admin-content">
+  <div class="toolbar">
+    <input type="text" class="search" id="search-input" placeholder="注文番号または客户名で検索..." oninput="filterOrders()">
+    <select id="sort-select" onchange="sortOrders()">
+      <option value="newest">新しい順</option>
+      <option value="oldest">古い順</option>
+      <option value="total-high">合計金額高い順</option>
+      <option value="total-low">合計金額低い順</option>
+    </select>
+    <button class="btn-refresh" onclick="loadOrders()">🔄 更新</button>
+    <button class="btn-export" onclick="exportAllCSV()">📥 全件 CSV 出力</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">注文総数</div>
+      <div class="stat-value" id="stat-total">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">今月</div>
+      <div class="stat-value" id="stat-month">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">売上合計</div>
+      <div class="stat-value" id="stat-revenue">¥0</div>
+    </div>
+  </div>
+
+  <div class="order-list" id="order-list">
+    <div class="empty-msg" id="empty-msg">注文データがありません</div>
+  </div>
+</div>
+
+<!-- Order Detail Overlay -->
+<div class="order-detail-overlay" id="detail-overlay">
+  <div class="order-detail-box">
+    <div class="order-detail-header">
+      <h2 id="detail-title">注文詳細</h2>
+      <button class="close-btn" onclick="closeDetail()">×</button>
+    </div>
+    <div class="detail-meta" id="detail-meta"></div>
+    <table class="order-detail-table">
+      <thead>
+        <tr>
+          <th>ＪＡＮコード</th>
+          <th>メーカー</th>
+          <th>品番</th>
+          <th>商品名</th>
+          <th class="right">単価</th>
+          <th class="center">数量</th>
+          <th class="right">小計</th>
+        </tr>
+      </thead>
+      <tbody id="detail-items"></tbody>
+    </table>
+    <div class="detail-total-row" id="detail-total"></div>
+    <div class="detail-footer">
+      <button class="btn-detail" onclick="exportDetailCSV()">📥 この注文を CSV 出力</button>
+      <button style="background:#f1f5f9; color:#64748b;" onclick="closeDetail()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PW = 'sd2026';
+let orders = [];
+let selectedOrder = null;
+
+function login() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === ADMIN_PW) {
+    document.getElementById('login-box').style.display = 'none';
+    document.getElementById('admin-content').classList.add('active');
+    document.getElementById('lock-icon').classList.remove('locked');
+    document.getElementById('lock-icon').classList.add('unlocked');
+    document.getElementById('btn-logout').style.display = 'block';
+    loadOrders();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function logout() {
+  orders = [];
+  selectedOrder = null;
+  document.getElementById('login-box').style.display = 'block';
+  document.getElementById('admin-content').classList.remove('active');
+  document.getElementById('lock-icon').classList.remove('unlocked');
+  document.getElementById('lock-icon').classList.add('locked');
+  document.getElementById('btn-logout').style.display = 'none';
+  document.getElementById('pw-input').value = '';
+}
+
+async function loadOrders() {
+  const res = await fetch('/api/admin/orders?password=' + ADMIN_PW);
+  if (!res.ok) { return; }
+  orders = await res.json();
+  updateStats();
+  renderOrders(orders);
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = orders.length;
+  const now = new Date();
+  const monthOrders = orders.filter(o => new Date(o.submitted_at) >= new Date(now.getFullYear(), now.getMonth(), 1));
+  document.getElementById('stat-month').textContent = monthOrders.length;
+  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
+  document.getElementById('stat-revenue').textContent = '¥' + totalRevenue.toLocaleString();
+}
+
+function renderOrders(list) {
+  const container = document.getElementById('order-list');
+  const empty = document.getElementById('empty-msg');
+  if (!list.length) {
+    container.innerHTML = '<div class="empty-msg">注文データがありません</div>';
+    return;
+  }
+  container.innerHTML = list.map(o => `
+    <div class="order-card" onclick="openDetail('${o.id}')">
+      <div class="order-card-header">
+        <span class="order-card-id">#${o.id}</span>
+        <span class="order-card-time">${o.submitted_at}</span>
+      </div>
+      <div class="order-card-client">客户: ${o.client_name}</div>
+      <div class="order-card-items">${o.items.length} アイテム</div>
+      <div class="order-card-total">¥${o.total.toLocaleString()}</div>
+      <div class="order-card-footer">
+        <button class="btn-detail" onclick="event.stopPropagation(); openDetail('${o.id}')">詳細</button>
+        <button class="btn-csv" onclick="event.stopPropagation(); exportOrderCSV('${o.id}')">CSV</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterOrders() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!q) { renderOrders(orders); return; }
+  const filtered = orders.filter(o =>
+    o.id.toLowerCase().includes(q) ||
+    o.client_name.toLowerCase().includes(q)
+  );
+  renderOrders(filtered);
+}
+
+function sortOrders() {
+  const s = document.getElementById('sort-select').value;
+  const sorted = [...orders];
+  if (s === 'newest') sorted.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+  if (s === 'oldest') sorted.sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at));
+  if (s === 'total-high') sorted.sort((a, b) => b.total - a.total);
+  if (s === 'total-low') sorted.sort((a, b) => a.total - b.total);
+  renderOrders(sorted);
+}
+
+function openDetail(id) {
+  selectedOrder = orders.find(o => o.id === id);
+  if (!selectedOrder) return;
+  document.getElementById('detail-title').textContent = `注文 #${selectedOrder.id}`;
+  document.getElementById('detail-meta').innerHTML = `
+    <div class="dm-item"><div class="dm-label">注文番号</div><div class="dm-value">#${selectedOrder.id}</div></div>
+    <div class="dm-item"><div class="dm-label">客户名</div><div class="dm-value">${selectedOrder.client_name}</div></div>
+    <div class="dm-item"><div class="dm-label">注文日時</div><div class="dm-value">${selectedOrder.submitted_at}</div></div>
+    <div class="dm-item"><div class="dm-label">アイテム数</div><div class="dm-value">${selectedOrder.items.length} 個</div></div>
+    <div class="dm-item" style="grid-column:1/-1"><div class="dm-label">合計金額</div><div class="dm-value accent">¥${selectedOrder.total.toLocaleString()}</div></div>`;
+  document.getElementById('detail-items').innerHTML = selectedOrder.items.map(it => `
+    <tr>
+      <td style="font-size:12px;">${it.jan}</td>
+      <td>${it.maker}</td>
+      <td>${it.code}</td>
+      <td>${it.name}</td>
+      <td class="right">¥${it.price.toLocaleString()}</td>
+      <td class="center">${it.qty}</td>
+      <td class="right">¥${it.subtotal.toLocaleString()}</td>
+    </tr>`).join('');
+  document.getElementById('detail-total').textContent = `合計: ¥${selectedOrder.total.toLocaleString()}`;
+  document.getElementById('detail-overlay').classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('active');
+  selectedOrder = null;
+}
+
+function exportOrderCSV(id) {
+  window.location.href = `/api/admin/export/${id}?password=${ADMIN_PW}`;
+}
+
+function exportDetailCSV() {
+  if (selectedOrder) exportOrderCSV(selectedOrder.id);
+}
+
+function exportAllCSV() {
+  if (!orders.length) return;
+  // Build CSV from all orders
+  const rows = [['注文番号', '客户名', '日時', 'アイテム数', '合計金額']];
+  orders.forEach(o => {
+    rows.push([o.id, o.client_name, o.submitted_at, o.items.length, o.total]);
+  });
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'orders_all_' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click();
+}
+
+document.getElementById('detail-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('detail-overlay')) closeDetail();
+});
+
+// Init lock icon
+document.getElementById('lock-icon').classList.add('locked');
+</script>
+</body>
+</html>
