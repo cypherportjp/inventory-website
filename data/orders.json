@@ -52,5 +52,50 @@
       }
     ],
     "total": 6700
+  },
+  {
+    "id": "88BBD850",
+    "session_id": "285afe2a",
+    "client_name": "ngo",
+    "submitted_at": "2026-05-19 00:21:27",
+    "items": [
+      {
+        "jan": "4950344063796",
+        "maker": "ﾀﾐﾔ",
+        "code": "17007",
+        "name": "ｷﾝｸﾞｷｬﾌﾞJｒ.",
+        "price": 1400,
+        "qty": 4,
+        "subtotal": 5600
+      },
+      {
+        "jan": "4950344063833",
+        "maker": "ﾀﾐﾔ",
+        "code": "17011",
+        "name": "ﾆｯｻﾝﾃﾗﾉﾊﾟﾘﾀﾞｶ仕様",
+        "price": 1400,
+        "qty": 1,
+        "subtotal": 1400
+      }
+    ],
+    "total": 7000
+  },
+  {
+    "id": "927D8E0D",
+    "session_id": "285afe2a",
+    "client_name": "ngo",
+    "submitted_at": "2026-05-19 00:21:45",
+    "items": [
+      {
+        "jan": "4950344180882",
+        "maker": "ﾀﾐﾔ",
+        "code": "18088",
+        "name": "ミニ四駆フクロウ(スーパー2)",
+        "price": 1100,
+        "qty": 1,
+        "subtotal": 1100
+      }
+    ],
+    "total": 1100
   }
 ]

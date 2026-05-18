@@ -12,7 +12,7 @@ app.config['JSON_AS_ASCII'] = False
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 ORDERS_FILE = os.path.join(DATA_DIR, 'orders.json')
-ADMIN_PASSWORD = 'sd2026'  # change this for production
+ADMIN_PASSWORD = 'admin'  # change this for production
 
 def load_products():
     with open(os.path.join(DATA_DIR, 'products.json'), 'r', encoding='utf-8') as f:
@@ -138,6 +138,7 @@ def orders_by_session():
     session_orders = [o for o in orders if o['session_id'] == sid]
     return jsonify(session_orders)
 
+@app.route('/api/admin/orders')
 def admin_get_orders():
     """Get all orders (password protected via query param)."""
     pw = request.args.get('password', '')
