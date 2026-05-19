@@ -104,8 +104,11 @@ header h1 { font-size: 17px; font-weight: 700; }
 .product-card .maker { font-size: 10px; color: var(--text-light); margin-bottom: 3px; font-weight: 500; }
 .product-card .pname { font-size: 12px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; min-height: 33px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-all; }
 .product-card .code { font-size: 10px; color: var(--text-xlight); margin-bottom: 6px; }
-.product-card .price-row { display: flex; align-items: center; justify-content: space-between; }
+.product-card .price-row { display: flex; flex-direction: column; gap: 2px; }
+.product-card .price-list { font-size: 10px; color: var(--text-xlight); text-decoration: line-through; }
+.product-card .price-row-main { display: flex; align-items: center; justify-content: space-between; }
 .product-card .price { font-size: 15px; font-weight: 700; }
+.product-card .rate-badge { font-size: 9px; background: #fff3cd; color: #856404; border-radius: 8px; padding: 1px 5px; font-weight: 600; }
 .product-card .stock-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
 .stock-green { background: #d4edda; color: #155724; }
 .stock-orange { background: #fff3cd; color: #856404; }
@@ -271,7 +274,7 @@ header h1 { font-size: 17px; font-weight: 700; }
       </select>
       <div class="view-toggle">
         <button id="btn-grid" onclick="setView('grid')" class="active">📷 グリッド</button>
-        <button id="btn-list" onclick="setView('list')">📋 列表</button>
+        <button id="btn-list" onclick="setView('list')">📋 一覧</button>
       </div>
       <span class="result-info"><span id="result-count">--</span> 件</span>
     </div>
@@ -318,16 +321,24 @@ header h1 { font-size: 17px; font-weight: 700; }
         <span id="ocp-order-id" style="font-weight:700; font-size:16px; color:#1a1a2e;">--</span>
       </div>
       <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:14px;">
-        <span style="color:#64748b;">客户名</span>
+        <span style="color:#64748b;">顧客名</span>
         <span id="ocp-client" style="font-weight:600;">--</span>
       </div>
       <div style="display:flex; justify-content:space-between; font-size:14px;">
         <span style="color:#64748b;">注文日時</span>
         <span id="ocp-time" style="color:#1a1a2e;">--</span>
       </div>
-      <div style="border-top:1px solid #e2e8f0; margin-top:16px; padding-top:16px; display:flex; justify-content:space-between;">
-        <span style="font-size:16px; font-weight:700; color:#1a1a2e;">合計金額</span>
-        <span id="ocp-total" style="font-size:22px; font-weight:800; color:#e05c2a;">--</span>
+      <div style="border-top:1px solid #e2e8f0; margin-top:16px; padding-top:16px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#64748b; margin-bottom:4px;">
+          <span>合計（下代）</span><span id="ocp-subtotal">--</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#64748b; margin-bottom:4px;">
+          <span>消費税（10%）</span><span id="ocp-tax">--</span>
+        </div>
+        <div style="border-top:1px solid #e2e8f0; margin-top:8px; padding-top:8px; display:flex; justify-content:space-between;">
+          <span style="font-size:16px; font-weight:700; color:#1a1a2e;">合計金額</span>
+          <span id="ocp-total" style="font-size:22px; font-weight:800; color:#e05c2a;">--</span>
+        </div>
       </div>
     </div>
     <div style="display:flex; gap:12px; flex-direction:column;">
@@ -357,11 +368,19 @@ header h1 { font-size: 17px; font-weight: 700; }
   <div class="cart-drawer-body" id="cart-body"></div>
   <div class="cart-drawer-footer">
     <div class="cart-total-row">
+      <span class="cart-total-label">下代合計</span>
+      <span id="cart-subtotal">¥0</span>
+    </div>
+    <div class="cart-total-row" style="font-size:12px;color:#64748b;">
+      <span>消費税（10%）</span>
+      <span id="cart-tax">¥0</span>
+    </div>
+    <div class="cart-total-row">
       <span class="cart-total-label">合計金額</span>
       <span class="cart-total-amount" id="cart-total">¥0</span>
     </div>
     <div class="cart-client-name">
-      <input type="text" id="client-name" placeholder="客戶名稱（任意）">
+      <input type="text" id="client-name" placeholder="顧客名（任意）">
     </div>
     <div class="cart-actions">
       <button class="btn-finish" onclick="finishOrder()">🎯 注文を完了する</button>
@@ -376,6 +395,7 @@ header h1 { font-size: 17px; font-weight: 700; }
     <div class="modal-img" id="modal-img"></div>
     <h3 id="modal-name"></h3>
     <div class="modal-meta" id="modal-meta"></div>
+    <div id="modal-pricing"></div>
     <div class="modal-price" id="modal-price"></div>
     <div class="modal-qty">
       <label>注文数量</label>
@@ -544,14 +564,22 @@ function renderGrid(list) {
 
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
+    const rate = p.discount_rate || 1.0;
+    const ratePct = rate < 1.0 ? Math.round(rate * 100) + '%' : '';
+    const listLine = rate < 1.0 ? '<div class="price-list">¥' + p.list_price.toLocaleString() + '</div>' : '';
     cardBody.innerHTML =
       '<div class="maker">' + esc(p.maker) + '</div>' +
       '<div class="pname">' + esc(p.name) + '</div>' +
       '<div class="code">' + esc(p.code) + '</div>' +
       '<div class="price-row">' +
+      listLine +
+      '<div class="price-row-main">' +
       '<span class="price">¥' + p.price.toLocaleString() + '</span>' +
+      (ratePct ? '<span class="rate-badge">' + ratePct + '</span>' : '') +
       '<span class="stock-badge ' + stockClass + '">' + (p.stock || '?') + '</span>' +
-      '</div>';
+      '</div>' +
+      '</div>' +
+      '<div style="font-size:9px;color:#94a3b8;margin-top:2px;">掛率 ' + ratePct + '</div>';
     card.appendChild(cardBody);
 
     if (inCart) {
@@ -589,7 +617,11 @@ function renderList(list) {
       '<td class="col-name"><span class="pname">' + esc(p.name) + '</span><span class="jan">JAN: ' + esc(p.jan) + '</span></td>' +
       '<td class="col-maker">' + esc(p.maker) + '</td>' +
       '<td class="col-code">' + esc(p.code) + '</td>' +
-      '<td class="col-price">¥' + p.price.toLocaleString() + '</td>' +
+      '<td class="col-price">' +
+      (p.discount_rate < 1.0 ? '<span style="font-size:10px;color:#94a3b8;text-decoration:line-through;">¥' + p.list_price.toLocaleString() + '</span><br>' : '') +
+      '¥' + p.price.toLocaleString() +
+      (p.discount_rate < 1.0 ? ' <span class="rate-badge">' + Math.round(p.discount_rate*100) + '%</span>' : '') +
+      '</td>' +
       '<td class="col-stock"><span class="stock-badge ' + stockClass + '">' + (p.stock || '?') + '</span></td>' +
 '<td class="col-action"><button onclick="openAddModal(products[' + products.indexOf(p) + '])">' + (inCart ? cartItem.qty + '個 →' : '追加') + '</button></td>'
     tbody.appendChild(tr);
@@ -603,6 +635,19 @@ function openAddModal(p) {
   selectedProduct = p;
   document.getElementById('modal-name').textContent = p.name;
   document.getElementById('modal-meta').textContent = p.maker + ' | 品番: ' + p.code + ' | JAN: ' + p.jan;
+  const rate = p.discount_rate || 1.0;
+  const ratePct = rate < 1.0 ? Math.round(rate * 100) + '%' : '';
+  if (rate < 1.0) {
+    document.getElementById('modal-pricing').innerHTML =
+      '<div style="font-size:12px;margin-bottom:4px;">\
+        <span style="color:#94a3b8;text-decoration:line-through;">定格 ¥' + p.list_price.toLocaleString() + '</span> → \
+        <span style="font-weight:700;">下代 ¥' + p.price.toLocaleString() + '</span> \
+        <span class="rate-badge">' + ratePct + '</span> \
+       </div>\
+       <div style="font-size:11px;color:#94a3b8;">掛率 ' + ratePct + '（' + p.maker + '）</div>';
+  } else {
+    document.getElementById('modal-pricing').innerHTML = '';
+  }
   document.getElementById('modal-price').textContent = '¥' + p.price.toLocaleString() + ' / 個';
   const qtyInput = document.getElementById('modal-qty');
   const existing = cart.find(c => c.jan === p.jan);
@@ -670,12 +715,17 @@ function renderCart() {
 
     const div = document.createElement('div');
     div.className = 'cart-item';
+    const rate = item.discount_rate || 1.0;
+    const ratePct = rate < 1.0 ? Math.round(rate * 100) + '%' : '';
+    const priceLine = rate < 1.0
+      ? '<span style="font-size:10px;color:#94a3b8;text-decoration:line-through;">¥' + item.list_price.toLocaleString() + '</span> <span style="font-weight:600;">¥' + item.price.toLocaleString() + '</span> <span class="rate-badge">' + ratePct + '</span>'
+      : '<span style="font-weight:600;">¥' + item.price.toLocaleString() + '</span>';
     div.innerHTML =
       '<div class="ci-thumb">' + thumbHTML + '</div>' +
       '<div class="ci-body">' +
       '<div class="ci-name">' + esc(item.name) + '</div>' +
       '<div class="ci-maker">' + esc(item.maker) + '</div>' +
-      '<div class="ci-price">¥' + item.price.toLocaleString() + ' / 個</div>' +
+      '<div class="ci-price">' + priceLine + ' / 個</div>' +
       '<div class="ci-controls">' +
       '<button class="qty-btn" onclick="changeCartQty(' + idx + ',-1)">−</button>' +
       '<span class="qty-num">' + item.qty + '</span>' +
@@ -685,7 +735,10 @@ function renderCart() {
       '<button class="ci-remove" onclick="removeItem(' + idx + ')">×</button>';
     body.appendChild(div);
   });
-  document.getElementById('cart-total').textContent = '¥' + total.toLocaleString();
+  document.getElementById('cart-subtotal').textContent = '¥' + total.toLocaleString();
+  const tax = Math.round(total * 0.10);
+  document.getElementById('cart-tax').textContent = '¥' + tax.toLocaleString();
+  document.getElementById('cart-total').textContent = '¥' + (total + tax).toLocaleString();
 }
 
 async function changeCartQty(idx, delta) {
@@ -736,7 +789,7 @@ function showOrderHistory() {
       <div style="text-align:center; padding:40px 20px; color:#94a3b8;">
         <div style="font-size:48px; margin-bottom:16px;">📋</div>
         <p style="font-size:14px;">注文履歴がありません</p>
-        <p style="font-size:12px; margin-top:8px; color:#c0c8d0;">商品を注文后会自動保存</p>
+        <p style="font-size:12px; margin-top:8px; color:#c0c8d0;">商品を注文すると自動的に保存されます</p>
       </div>`;
   } else {
     fetch('/api/order/by-session?session_id=' + sid)
@@ -756,7 +809,7 @@ function showOrderHistory() {
                 <span style="font-weight:700; color:#1a3c5e;">#${o.id}</span>
                 <span style="font-size:12px; color:#94a3b8;">${o.submitted_at}</span>
               </div>
-              <div style="font-size:12px; color:#64748b; margin-bottom:6px;">客户: ${o.client_name}</div>
+              <div style="font-size:12px; color:#64748b; margin-bottom:6px;">顧客: ${o.client_name}</div>
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:12px; color:#64748b;">${o.items.length} アイテム</span>
                 <span style="font-weight:800; color:#e05c2a; font-size:16px;">¥${o.total.toLocaleString()}</span>
@@ -794,7 +847,7 @@ function showHistoryDetail(orderId, sid) {
           <button onclick="printHistoryInvoice('${sid}','${o.id}')" style="background:#1a3c5e; color:white; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer;">🖨 PDF</button>
         </div>
         <div style="background:#f8fafc; border-radius:10px; padding:16px; margin-bottom:16px; font-size:13px;">
-          <div style="margin-bottom:6px;"><span style="color:#94a3b8;">客户名:</span> ${o.client_name}</div>
+          <div style="margin-bottom:6px;"><span style="color:#94a3b8;">顧客名:</span> ${o.client_name}</div>
           <div style="margin-bottom:6px;"><span style="color:#94a3b8;">日時:</span> ${o.submitted_at}</div>
           <div style="font-weight:800; color:#e05c2a; font-size:18px; text-align:right; margin-top:8px;">合計: ¥${o.total.toLocaleString()}</div>
         </div>
@@ -832,7 +885,7 @@ function printHistoryInvoice(sid, orderId) {
         <h1>注文書</h1>
         <div class="meta">
           <div>注文番号: <strong>${o.id}</strong></div>
-          <div>客户名: <strong>${o.client_name}</strong></div>
+          <div>顧客名: <strong>${o.client_name}</strong></div>
           <div>注文日時: ${o.submitted_at}</div>
         </div>
         <table>
@@ -865,6 +918,8 @@ async function finishOrder() {
   document.getElementById('ocp-order-id').textContent = lastOrder.id;
   document.getElementById('ocp-client').textContent = lastOrder.client_name;
   document.getElementById('ocp-time').textContent = lastOrder.submitted_at;
+  document.getElementById('ocp-subtotal').textContent = '¥' + lastOrder.subtotal.toLocaleString();
+  document.getElementById('ocp-tax').textContent = '¥' + lastOrder.tax.toLocaleString();
   document.getElementById('ocp-total').textContent = '¥' + lastOrder.total.toLocaleString();
   document.getElementById('order-complete-page').style.display = 'block';
   document.getElementById('cart-drawer').classList.remove('open');
@@ -903,7 +958,7 @@ function printInvoice() {
   <h1>注文書</h1>
   <div class="meta">
     <div>注文番号: <strong>${lastOrder.id}</strong></div>
-    <div>客户名: <strong>${lastOrder.client_name}</strong></div>
+    <div>顧客名: <strong>${lastOrder.client_name}</strong></div>
     <div>注文日時: ${lastOrder.submitted_at}</div>
   </div>
   <table>

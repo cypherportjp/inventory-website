@@ -97,5 +97,122 @@
       }
     ],
     "total": 1100
+  },
+  {
+    "id": "3843C055",
+    "session_id": "70c8403c",
+    "client_name": "ggg",
+    "submitted_at": "2026-05-19 16:17:30",
+    "items": [
+      {
+        "jan": "4950344063871",
+        "maker": "ﾀﾐﾔ",
+        "code": "18069",
+        "name": "エンペラー プレミアム",
+        "price": 1100,
+        "qty": 4,
+        "subtotal": 4400
+      }
+    ],
+    "total": 4400
+  },
+  {
+    "id": "58EDD015",
+    "session_id": "267d485c",
+    "client_name": "ngo",
+    "submitted_at": "2026-05-19 18:02:41",
+    "items": [
+      {
+        "jan": "4950344063871",
+        "maker": "ﾀﾐﾔ",
+        "code": "18069",
+        "name": "エンペラー プレミアム",
+        "list_price": 1100,
+        "discount_rate": 0.68,
+        "price": 748,
+        "qty": 9,
+        "subtotal": 6732
+      },
+      {
+        "jan": "4950344063888",
+        "maker": "ﾀﾐﾔ",
+        "code": "18074",
+        "name": "ダッシュX1 PエンペラープレミアムSUPER-II",
+        "list_price": 1100,
+        "discount_rate": 0.68,
+        "price": 748,
+        "qty": 1,
+        "subtotal": 748
+      }
+    ],
+    "subtotal": 7480,
+    "tax": 748,
+    "total": 8228
+  },
+  {
+    "id": "48F54BAA",
+    "session_id": "267d485c",
+    "client_name": "ngo",
+    "submitted_at": "2026-05-19 18:06:26",
+    "items": [
+      {
+        "jan": "4950344063819",
+        "maker": "ﾀﾐﾔ",
+        "code": "17009",
+        "name": "ﾊｲﾗｯｸｽMﾚｰｻｰJｒ.",
+        "list_price": 1400,
+        "discount_rate": 0.68,
+        "price": 952,
+        "qty": 2,
+        "subtotal": 1904
+      },
+      {
+        "jan": "4950344063864",
+        "maker": "ﾀﾐﾔ",
+        "code": "18066",
+        "name": "スラッシュ リーパー",
+        "list_price": 1100,
+        "discount_rate": 0.68,
+        "price": 748,
+        "qty": 2,
+        "subtotal": 1496
+      }
+    ],
+    "subtotal": 3400,
+    "tax": 340,
+    "total": 3740
+  },
+  {
+    "id": "A83E91F6",
+    "session_id": "282c0abd",
+    "client_name": "ゲスト",
+    "submitted_at": "2026-05-19 19:21:41",
+    "items": [
+      {
+        "jan": "4950344063796",
+        "maker": "ﾀﾐﾔ",
+        "code": "17007",
+        "name": "ｷﾝｸﾞｷｬﾌﾞJｒ.",
+        "list_price": 1400,
+        "discount_rate": 0.68,
+        "price": 952,
+        "qty": 3,
+        "subtotal": 2856
+      },
+      {
+        "jan": "4950344063949",
+        "maker": "ﾀﾐﾔ",
+        "code": "18086",
+        "name": "ミニ四駆ドッグ(スーパー2)",
+        "list_price": 1200,
+        "discount_rate": 0.68,
+        "price": 816,
+        "qty": 2,
+        "subtotal": 1632
+      }
+    ],
+    "subtotal": 4488,
+    "tax": 449,
+    "total": 4937
   }
 ]
