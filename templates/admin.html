@@ -159,7 +159,12 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans
 </div>
 
 <script>
-const ADMIN_PW = 'admin';
+function esc(s) {
+  if (!s) return '';
+  return String(s).normalize('NFKC').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+const ADMIN_PW = 'toyohaya';
 let orders = [];
 let selectedOrder = null;
 
@@ -263,7 +268,7 @@ function openDetail(id) {
       <td style="font-size:12px;">${it.jan}</td>
       <td>${it.maker}</td>
       <td>${it.code}</td>
-      <td>${it.name}</td>
+      <td>${esc(it.name)}</td>
       <td class="right">¥${it.price.toLocaleString()}</td>
       <td class="center">${it.qty}</td>
       <td class="right">¥${it.subtotal.toLocaleString()}</td>
@@ -278,7 +283,7 @@ function closeDetail() {
 }
 
 function exportOrderCSV(id) {
-  window.location.href = `/api/admin/export/${id}?password=${ADMIN_PW}`;
+  window.location.href = `/inventory-website/api/admin/export/${id}?password=${ADMIN_PW}`;
 }
 
 function exportDetailCSV() {

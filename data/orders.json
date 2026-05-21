@@ -1,137 +1,64 @@
 [
   {
-    "id": "BAE117D5",
-    "session_id": "58a08be4",
-    "client_name": "ゲスト",
-    "submitted_at": "2026-05-17 23:33:09",
+    "id": "0D0089F1",
+    "session_id": "fc8a7656",
+    "client_name": "hamster",
+    "submitted_at": "2026-05-20 12:38:31",
     "items": [
       {
-        "jan": "4950344063819",
+        "jan": "4950344032914",
         "maker": "ﾀﾐﾔ",
-        "code": "17009",
-        "name": "ﾊｲﾗｯｸｽMﾚｰｻｰJｒ.",
-        "price": 1400,
-        "qty": 1,
-        "subtotal": 1400
+        "code": "5",
+        "name": "ﾐﾆ四駆 HGﾒﾝﾃﾅﾝｽﾍﾞｰｽ (180x210mm)",
+        "list_price": 1600,
+        "discount_rate": 0.68,
+        "price": 1088,
+        "qty": 3,
+        "subtotal": 3264
       },
       {
-        "jan": "4950344180837",
+        "jan": "4950344180943",
         "maker": "ﾀﾐﾔ",
-        "code": "18083",
-        "name": "ミニ4駆 しろくまっこ(スーパー2)",
-        "price": 1100,
-        "qty": 1,
-        "subtotal": 1100
-      }
-    ],
-    "total": 2500
-  },
-  {
-    "id": "A943EE0F",
-    "session_id": "6462e4fc",
-    "client_name": "ゲスト",
-    "submitted_at": "2026-05-17 23:45:30",
-    "items": [
-      {
-        "jan": "4950344063819",
-        "maker": "ﾀﾐﾔ",
-        "code": "17009",
-        "name": "ﾊｲﾗｯｸｽMﾚｰｻｰJｒ.",
-        "price": 1400,
-        "qty": 4,
-        "subtotal": 5600
-      },
-      {
-        "jan": "4950344063857",
-        "maker": "ﾀﾐﾔ",
-        "code": "18065",
-        "name": "ミニ4駆 スーパーアバンテRS(スーパー2)",
-        "price": 1100,
-        "qty": 1,
-        "subtotal": 1100
-      }
-    ],
-    "total": 6700
-  },
-  {
-    "id": "88BBD850",
-    "session_id": "285afe2a",
-    "client_name": "ngo",
-    "submitted_at": "2026-05-19 00:21:27",
-    "items": [
-      {
-        "jan": "4950344063796",
-        "maker": "ﾀﾐﾔ",
-        "code": "17007",
-        "name": "ｷﾝｸﾞｷｬﾌﾞJｒ.",
-        "price": 1400,
-        "qty": 4,
-        "subtotal": 5600
-      },
-      {
-        "jan": "4950344063833",
-        "maker": "ﾀﾐﾔ",
-        "code": "17011",
-        "name": "ﾆｯｻﾝﾃﾗﾉﾊﾟﾘﾀﾞｶ仕様",
-        "price": 1400,
-        "qty": 1,
-        "subtotal": 1400
-      }
-    ],
-    "total": 7000
-  },
-  {
-    "id": "927D8E0D",
-    "session_id": "285afe2a",
-    "client_name": "ngo",
-    "submitted_at": "2026-05-19 00:21:45",
-    "items": [
-      {
-        "jan": "4950344180882",
-        "maker": "ﾀﾐﾔ",
-        "code": "18088",
-        "name": "ミニ四駆フクロウ(スーパー2)",
-        "price": 1100,
-        "qty": 1,
-        "subtotal": 1100
-      }
-    ],
-    "total": 1100
-  },
-  {
-    "id": "3843C055",
-    "session_id": "70c8403c",
-    "client_name": "ggg",
-    "submitted_at": "2026-05-19 16:17:30",
-    "items": [
-      {
-        "jan": "4950344063871",
-        "maker": "ﾀﾐﾔ",
-        "code": "18069",
-        "name": "エンペラー プレミアム",
-        "price": 1100,
-        "qty": 4,
-        "subtotal": 4400
-      }
-    ],
-    "total": 4400
-  },
-  {
-    "id": "58EDD015",
-    "session_id": "267d485c",
-    "client_name": "ngo",
-    "submitted_at": "2026-05-19 18:02:41",
-    "items": [
-      {
-        "jan": "4950344063871",
-        "maker": "ﾀﾐﾔ",
-        "code": "18069",
-        "name": "エンペラー プレミアム",
+        "code": "18094",
+        "name": "ﾚｰｻｰﾐﾆ四駆 ﾈｵVQS",
         "list_price": 1100,
         "discount_rate": 0.68,
         "price": 748,
-        "qty": 9,
-        "subtotal": 6732
+        "qty": 2,
+        "subtotal": 1496
+      },
+      {
+        "jan": "4920136736153",
+        "maker": "ﾏﾙｼﾝ工業",
+        "code": "",
+        "name": "F1 海軍ﾊﾟｲﾛｯﾄ(立ち)",
+        "list_price": 2000,
+        "discount_rate": 1,
+        "price": 2000,
+        "qty": 4,
+        "subtotal": 8000
+      }
+    ],
+    "subtotal": 12760,
+    "tax": 1276,
+    "total": 14036
+  },
+  {
+    "id": "612EE6F1",
+    "session_id": "3f72f3e5",
+    "client_name": "ゲスト",
+    "submitted_at": "2026-05-20 12:54:23",
+    "items": [
+      {
+        "jan": "4950344032907",
+        "maker": "ﾀﾐﾔ",
+        "code": "4",
+        "name": "ﾌﾞﾛｯｹﾝｷﾞｶﾞﾝﾄ ﾌﾞﾗｯｸ ﾌﾟﾚﾐｱﾑ(FM-Aｼｬｰｼ)",
+        "list_price": 1300,
+        "discount_rate": 0.68,
+        "price": 884,
+        "qty": 2,
+        "subtotal": 1768
       },
       {
         "jan": "4950344063888",
@@ -145,21 +72,21 @@
         "subtotal": 748
       }
     ],
-    "subtotal": 7480,
-    "tax": 748,
-    "total": 8228
+    "subtotal": 2516,
+    "tax": 252,
+    "total": 2768
   },
   {
-    "id": "48F54BAA",
-    "session_id": "267d485c",
-    "client_name": "ngo",
-    "submitted_at": "2026-05-19 18:06:26",
+    "id": "4CFCCF2A",
+    "session_id": "8643be31",
+    "client_name": "hamster",
+    "submitted_at": "2026-05-21 10:29:35",
     "items": [
       {
-        "jan": "4950344063819",
+        "jan": "4950344063772",
         "maker": "ﾀﾐﾔ",
-        "code": "17009",
-        "name": "ﾊｲﾗｯｸｽMﾚｰｻｰJｒ.",
+        "code": "17003",
+        "name": "ﾗﾝﾁﾎﾞｯｸｽJｒ.",
         "list_price": 1400,
         "discount_rate": 0.68,
         "price": 952,
@@ -167,52 +94,19 @@
         "subtotal": 1904
       },
       {
-        "jan": "4950344063864",
+        "jan": "4950344179039",
         "maker": "ﾀﾐﾔ",
-        "code": "18066",
-        "name": "スラッシュ リーパー",
-        "list_price": 1100,
+        "code": "17903",
+        "name": "パンダレーサー（グリーン/ライキリ）",
+        "list_price": 1800,
         "discount_rate": 0.68,
-        "price": 748,
-        "qty": 2,
-        "subtotal": 1496
+        "price": 1224,
+        "qty": 1,
+        "subtotal": 1224
       }
     ],
-    "subtotal": 3400,
-    "tax": 340,
-    "total": 3740
-  },
-  {
-    "id": "A83E91F6",
-    "session_id": "282c0abd",
-    "client_name": "ゲスト",
-    "submitted_at": "2026-05-19 19:21:41",
-    "items": [
-      {
-        "jan": "4950344063796",
-        "maker": "ﾀﾐﾔ",
-        "code": "17007",
-        "name": "ｷﾝｸﾞｷｬﾌﾞJｒ.",
-        "list_price": 1400,
-        "discount_rate": 0.68,
-        "price": 952,
-        "qty": 3,
-        "subtotal": 2856
-      },
-      {
-        "jan": "4950344063949",
-        "maker": "ﾀﾐﾔ",
-        "code": "18086",
-        "name": "ミニ四駆ドッグ(スーパー2)",
-        "list_price": 1200,
-        "discount_rate": 0.68,
-        "price": 816,
-        "qty": 2,
-        "subtotal": 1632
-      }
-    ],
-    "subtotal": 4488,
-    "tax": 449,
-    "total": 4937
+    "subtotal": 3128,
+    "tax": 313,
+    "total": 3441
   }
 ]

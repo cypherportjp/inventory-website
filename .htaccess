@@ -1,0 +1,6 @@
+RewriteEngine on
+
+# Everything else → index.php (PHP proxy to gunicorn)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]

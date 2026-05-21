@@ -195,9 +195,9 @@ def admin_export_order(order_id):
             item['subtotal'],
         ])
     w.writerow([])
-    w.writerow(['合計', '', '', '', '', '', '', '', '', order['subtotal']])
-    w.writerow(['消費税(10%)', '', '', '', '', '', '', '', '', order['tax']])
-    w.writerow(['総計', '', '', '', '', '', '', '', '', order['total']])
+    w.writerow(['合計', '', '', '', '', '', '', '', '', order.get('subtotal', order.get('total', 0))])
+    w.writerow(['消費税(10%)', '', '', '', '', '', '', '', '', order.get('tax', round(order.get('total', 0) / 11))])
+    w.writerow(['総計', '', '', '', '', '', '', '', '', order.get('total', 0)])
     output.seek(0)
     fname = f"order_{order_id}_{order['submitted_at'][:10].replace('-','')}.csv"
     return send_file(
@@ -208,8 +208,16 @@ def admin_export_order(order_id):
     )
 
 @app.route('/static/images/<path:filename>')
+@app.route('/images/<path:filename>')
 def serve_image(filename):
-    return send_from_directory(DATA_DIR, 'images/' + filename)
+    # Try static/images first, then data/images
+    static_path = os.path.join(BASE_DIR, 'static', 'images', filename)
+    data_path = os.path.join(DATA_DIR, 'images', filename)
+    if os.path.exists(static_path):
+        return send_from_directory(os.path.join(BASE_DIR, 'static', 'images'), filename)
+    if os.path.exists(data_path):
+        return send_from_directory(os.path.join(DATA_DIR, 'images'), filename)
+    return '', 404
 
 if __name__ == '__main__':
     import os
