@@ -1,6 +1,7 @@
 # 更新日誌 (Changelog)
 
 ## 2026-05-22
+- **商品カード橙枠・qty-badge 残存バグ**：clearCart 或いは qty 1→0 でカートクリア後、商品カードの橙枠・qty-badge が残ったままになる → clearCart() と changeCartQty() の optimistic removal 後に `render()` 追加
 - **購物車税額/合計 ¥0 リセットバグ修正**：`changeCartQty` で qty 1→0 の時に税額/合計が ¥0 にならない → 直接 DOM 操作で即座リセット（optimistic update）
 - **clearCart() 同様修正**：fetch 前に DOM を ¥0 にリセット
 - **order-complete も修正**：fetch 前に DOM を ¥0 にリセット

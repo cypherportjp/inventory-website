@@ -940,6 +940,7 @@ async function changeCartQty(idx, delta) {
     document.getElementById('cart-badge').textContent = '0';
     cart.splice(idx, 1);
     renderCart();
+    render(); // re-render catalog to remove orange border / qty badge
     await fetch('/api/cart/clear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: sessionId }) });
     for (const it of cart) { await fetch('/api/cart/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: sessionId, product: it, qty: it.qty }) }); }
     return;
@@ -971,6 +972,7 @@ async function clearCart() {
   await fetch('/api/cart/clear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: sessionId }) });
   cart = [];
   renderCart();
+  render(); // re-render catalog to remove orange border / qty badge on product cards
   showToast('カートをクリアしました');
 }
 
