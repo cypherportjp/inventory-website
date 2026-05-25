@@ -66,8 +66,10 @@ def cart_add():
     sid = data.get('session_id')
     product = data.get('product')
     qty = int(data.get('qty', 1))
-    if not sid or sid not in carts:
+    if not sid:
         return jsonify({'error': 'Invalid session'}), 400
+    if sid not in carts:
+        carts[sid] = []
     cart = carts[sid]
     for item in cart:
         if item['jan'] == product['jan']:

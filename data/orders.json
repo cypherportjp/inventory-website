@@ -108,5 +108,159 @@
     "subtotal": 3128,
     "tax": 313,
     "total": 3441
+  },
+  {
+    "id": "89683791",
+    "session_id": "aa1cc98a",
+    "client_name": "Hermes Test",
+    "submitted_at": "2026-05-25 11:33:23",
+    "items": [
+      {
+        "jan": "4950344032914",
+        "maker": "タミヤ",
+        "code": "5",
+        "name": "Test Product",
+        "list_price": 1600,
+        "discount_rate": 0.68,
+        "price": 1088,
+        "qty": 2,
+        "subtotal": 2176
+      }
+    ],
+    "subtotal": 2176,
+    "tax": 218,
+    "total": 2394
+  },
+  {
+    "id": "A8658DA5",
+    "session_id": "d354181b",
+    "client_name": "Hermes Test",
+    "submitted_at": "2026-05-25 11:36:01",
+    "items": [
+      {
+        "jan": "4950344063772",
+        "maker": "ﾀﾐﾔ",
+        "code": "17003",
+        "name": "ﾗﾝﾁﾎﾞｯｸｽJｒ.",
+        "list_price": 1400,
+        "discount_rate": 0.68,
+        "price": 952,
+        "qty": 1,
+        "subtotal": 952
+      }
+    ],
+    "subtotal": 952,
+    "tax": 95,
+    "total": 1047
+  },
+  {
+    "id": "70E30E64",
+    "session_id": "d354181b",
+    "client_name": "Hermes",
+    "submitted_at": "2026-05-25 11:47:13",
+    "items": [
+      {
+        "jan": "4950344063772",
+        "maker": "ﾀﾐﾔ",
+        "code": "17003",
+        "name": "ﾗﾝﾁﾎﾞｯｸｽJｒ.",
+        "list_price": 1400,
+        "discount_rate": 0.68,
+        "price": 952,
+        "qty": 1,
+        "subtotal": 952
+      }
+    ],
+    "subtotal": 952,
+    "tax": 95,
+    "total": 1047
+  },
+  {
+    "id": "E87BFC24",
+    "session_id": "c8f5fa46",
+    "client_name": "Test",
+    "submitted_at": "2026-05-25 13:06:20",
+    "items": [
+      {
+        "jan": "4950344031504",
+        "maker": "test",
+        "code": "1",
+        "name": "test",
+        "list_price": 500,
+        "discount_rate": 0.68,
+        "price": 500,
+        "qty": 2,
+        "subtotal": 1000
+      }
+    ],
+    "subtotal": 1000,
+    "tax": 100,
+    "total": 1100
+  },
+  {
+    "id": "D4818DA1",
+    "session_id": "4c4c4c84",
+    "client_name": "Test",
+    "submitted_at": "2026-05-25 13:06:49",
+    "items": [
+      {
+        "jan": "4950344031504",
+        "maker": "test",
+        "code": "1",
+        "name": "test",
+        "list_price": 500,
+        "discount_rate": 0.68,
+        "price": 500,
+        "qty": 2,
+        "subtotal": 1000
+      }
+    ],
+    "subtotal": 1000,
+    "tax": 100,
+    "total": 1100
+  },
+  {
+    "id": "A65096B0",
+    "session_id": "9123874a",
+    "client_name": "ゲスト",
+    "submitted_at": "2026-05-25 21:34:14",
+    "items": [
+      {
+        "jan": "4950344063826",
+        "maker": "ﾀﾐﾔ",
+        "code": "17010",
+        "name": "ﾊｲﾗｯｸｽｻｰﾌ",
+        "list_price": 1400,
+        "discount_rate": 0.68,
+        "price": 952,
+        "qty": 2,
+        "subtotal": 1904
+      }
+    ],
+    "subtotal": 1904,
+    "tax": 190,
+    "total": 2094
+  },
+  {
+    "id": "191D8962",
+    "session_id": "aa0806a1",
+    "client_name": "ゲスト",
+    "submitted_at": "2026-05-25 21:34:39",
+    "items": [
+      {
+        "jan": "4950344032914",
+        "maker": "ﾀﾐﾔ",
+        "code": "5",
+        "name": "ﾐﾆ四駆 HGﾒﾝﾃﾅﾝｽﾍﾞｰｽ (180x210mm)",
+        "list_price": 1600,
+        "discount_rate": 0.68,
+        "price": 1088,
+        "qty": 10,
+        "subtotal": 10880
+      }
+    ],
+    "subtotal": 10880,
+    "tax": 1088,
+    "total": 11968
   }
 ]

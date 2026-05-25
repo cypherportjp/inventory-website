@@ -624,30 +624,26 @@ function closeSidebar() {
 }
 
 async function init() {
-  const savedSid = localStorage.getItem('sd_sid');
-  if (savedSid) {
-    sessionId = savedSid;
-    const r = await fetch('/api/cart?session_id=' + sessionId);
-    const cartData = await r.json();
-    if (Array.isArray(cartData) && cartData.length > 0) {
-      cart = cartData;
-      renderCart();
-    } else {
-      const r2 = await fetch('/api/session/new', { method: 'POST' });
-      sessionId = (await r2.json()).session_id;
-      localStorage.setItem('sd_sid', sessionId);
-    }
-  } else {
-    const r = await fetch('/api/session/new', { method: 'POST' });
-    sessionId = (await r.json()).session_id;
-    localStorage.setItem('sd_sid', sessionId);
+  // Client-side session: generate UUID locally, no server round-trip needed
+  let savedSid = localStorage.getItem('sd_sid');
+  if (!savedSid) {
+    savedSid = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('sd_sid', savedSid);
   }
+  sessionId = savedSid;
 
   const r = await fetch('/api/products');
   products = await r.json();
   document.getElementById('total-count').textContent = products.length;
   document.getElementById('stock-o').textContent = products.filter(p => p.stock === '○').length;
   document.getElementById('stock-d').textContent = products.filter(p => p.stock === '△').length;
+
+  const rc = await fetch('/api/cart?session_id=' + sessionId);
+  const cartData = await rc.json();
+  if (Array.isArray(cartData) && cartData.length > 0) {
+    cart = cartData;
+    renderCart();
+  }
   buildMakerSidebar();
   render();
 }
@@ -1100,13 +1096,13 @@ function printHistoryInvoice(sid, orderId) {
 
 async function finishOrder() {
   const clientName = document.getElementById('client-name').value.trim();
-  if (cart.length === 0) { showToast('カートが空です'); return; }
+  if (cart.length === 0) { showToast("カートが空です"); return; }
 
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const tax = Math.round(subtotal * 0.10);
   const total = subtotal + tax;
 
-  const res = await fetch('/api/order/create', {
+  const res = await fetch('/api/order/complete', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ session_id: sessionId, client_name: clientName, items: cart, subtotal, tax, total })
