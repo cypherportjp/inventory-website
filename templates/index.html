@@ -651,7 +651,7 @@ async function init() {
 function buildMakerSidebar() {
   const makers = {};
   products.forEach(p => {
-    const m = p.maker || '不明';
+    const m = p.maker.trim();
     makers[m] = (makers[m] || 0) + 1;
   });
   const sorted = Object.entries(makers).sort((a, b) => a[0].localeCompare(b[0]));
@@ -672,21 +672,24 @@ function buildMakerSidebar() {
   drawerList.appendChild(makeItem('全て表示', products.length, activeMaker === ''));
 
   sorted.forEach(([name, cnt]) => {
-    list.appendChild(makeItem(name, cnt, activeMaker === name));
-    drawerList.appendChild(makeItem(name, cnt, activeMaker === name));
+    list.appendChild(makeItem(name, cnt, activeMaker.trim() === name.trim()));
+    drawerList.appendChild(makeItem(name, cnt, activeMaker.trim() === name.trim()));
   });
 }
 
 function selectMaker(name) {
+  // Normalize to NFKC so half-width katakana matches full-width DOM textContent
+  const norm = s => String(s).normalize('NFKC');
+  const nameOrAll = name === '全て表示' ? '全て表示' : norm(name);
   // '全て表示' means no filter — convert to empty string
-  activeMaker = (name === '全て表示' ? '' : name);
+  activeMaker = (name === '全て表示' ? '' : norm(name));
   // Update desktop sidebar
   document.querySelectorAll('#maker-list .maker-item').forEach(el => {
-    el.classList.toggle('active', el.querySelector('.m-name').textContent === (name || '全て表示'));
+    el.classList.toggle('active', el.querySelector('.m-name').textContent.trim() === nameOrAll);
   });
   // Update mobile drawer
   document.querySelectorAll('#drawer-maker-list .maker-item').forEach(el => {
-    el.classList.toggle('active', el.querySelector('.m-name').textContent === (name || '全て表示'));
+    el.classList.toggle('active', el.querySelector('.m-name').textContent.trim() === nameOrAll);
   });
   render();
 }
@@ -704,7 +707,7 @@ function getFiltered() {
   const q = toHalfWidth(document.getElementById('search-input').value.trim().toLowerCase());
   const stock = document.getElementById('stock-filter').value;
   return products.filter(p => {
-    if (activeMaker && p.maker !== activeMaker) return false;
+    if (activeMaker && p.maker.normalize('NFKC') !== activeMaker) return false;
     if (q && !toHalfWidth(p.name).toLowerCase().includes(q) && !toHalfWidth(p.maker).toLowerCase().includes(q) && !p.jan.includes(q)) return false;
     if (stock && p.stock !== stock) return false;
     return true;
